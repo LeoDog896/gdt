@@ -3,6 +3,13 @@ gdscript tools for abstract manipulation of ASTs.
 
 **ALL TOOLS ARE UNSTABLE**. The grammer is subject to change at any time, and so are formatting tools, as of 0.x
 
+## Plans
+
+- [ ] GDScript parser (first!)
+- [ ] GDScript linter (analyze the AST to find common patterns of mistakes)
+- [ ] GDScript formatter (parse and restringify the AST)
+- [ ] GDScript LSP integration (provide additional information to linters to provide extra hints)
+
 ## Grammar Development
 
 We use [pest](https://pest.rs) for making grammar. As a good reference guide, [GDScript has a EBNF grammar](https://docs.godotengine.org/en/latest/contributing/development/file_formats/gdscript_grammar.html).
