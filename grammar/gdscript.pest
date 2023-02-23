@@ -41,7 +41,19 @@ statement = { annotation* ~ (variableDeclaration | inheritance | class_name) }
 onready = { "onready " }
 export = { "export " }
 
-variableDeclaration = { onready? ~ export? ~ "var " ~ identifier ~ "=" ~ expression }
+variableType = { ":" ~ identifier }
+inferred = @{ ":=" }
+variableDeclaration = { 
+	onready?
+    ~ export?
+    ~ "var "
+    ~ identifier
+    ~ (
+    	(variableType ~ ("=" ~ expression)?)
+        | (variableType? ~ ("=" ~ expression))
+        | (inferred ~ expression)
+    )?
+}
 
 WHITESPACE = _{ " " | "\t" | "\n" }
 COMMENT = { "#" ~ (!"\n" ~ ANY)* }
