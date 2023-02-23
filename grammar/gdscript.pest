@@ -36,7 +36,7 @@ class_name = ${ "class_name " ~ identifier }
 
 annotation = @{ "@" ~ identifier ~ "(" ~ string ~ ")" }
 
-statement = { annotation* ~ (variableDeclaration | inheritance | class_name) }
+statement = { annotation* ~ (variableDeclaration | constDeclaration | inheritance | class_name) }
 
 onready = { "onready " }
 export = { "export " }
@@ -53,6 +53,16 @@ variableDeclaration = {
         | (variableType? ~ ("=" ~ expression))
         | (inferred ~ expression)
     )?
+}
+
+// const's don't have walrus operators
+constDeclaration = {
+	export?
+    ~ "const "
+    ~ identifier
+    ~ variableType?
+    ~ "="
+    ~ expression
 }
 
 WHITESPACE = _{ " " | "\t" | "\n" }
