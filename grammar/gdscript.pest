@@ -1,0 +1,13 @@
+// https://docs.godotengine.org/en/latest/contributing/development/file_formats/gdscript_grammar.html
+program = { SOI ~ inheritance ~ class_name? ~ top_level_decl ~ EOI }
+
+// all chars allowed by gdscript in an identifier
+char = { ASCII_ALPHA }
+chars = @{ char+ }
+
+inheritance = ${ "extends " ~ chars ~ WHITESPACE }
+class_name = ${ "class_name " ~ chars }
+top_level_decl = { "a"* }
+
+WHITESPACE = _{ " " | "\t" | "\n" }
+COMMENT = { "#" ~ (!"\n" ~ ANY)* }

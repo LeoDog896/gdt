@@ -1,6 +1,8 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+use pest_derive::Parser;
+
+#[derive(Parser)]
+#[grammar = "../grammar/gdscript.pest"] // relative to src
+struct MyParser;
 
 #[cfg(test)]
 mod tests {
@@ -8,7 +10,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
+        let result = 2 + 2;
         assert_eq!(result, 4);
     }
 }
