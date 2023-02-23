@@ -1,20 +1,40 @@
 // https://docs.godotengine.org/en/latest/contributing/development/file_formats/gdscript_grammar.html
-program = { SOI ~ inheritance ~ class_name? ~ top_level_decl ~ EOI }
+program = {
+	SOI
+    ~ statement* ~
+    EOI
+}
 
 // all chars allowed by gdscript in an identifier
-char = { ASCII_ALPHA }
-identifier = @{ char+ }
+ident_char = { ASCII_ALPHA }
+identifier = @{ ident_char+ }
 
-digit = { ASCII_ALPHANUMERIC }
+char = { ASCII_ALPHANUMERIC }
+chars = @{ char* }
+
+digit = { ASCII_DIGIT }
 number = @{ digit+ }
 
-expression = { identifier | number }
+string = ${ "\"" ~ chars ~ "\"" }
 
-inheritance = ${ "extends " ~ identifier ~ WHITESPACE }
+array = { 
+	"[" ~ "]" |
+    "[" ~ expression ~ ("," ~ expression)* ~ "]"
+}
+
+pair = { (string | number) ~ ("=" | ":") ~ expression }
+
+object = {
+    "{" ~ "}" |
+    "{" ~ pair ~ ("," ~ pair)* ~ "}"
+}
+
+expression = { identifier | number | string | array | object }
+
+inheritance = ${ "extends " ~ identifier }
 class_name = ${ "class_name " ~ identifier }
-top_level_decl = { statement* }
 
-statement = _{ variableDeclaration }
+statement = _{ variableDeclaration | inheritance | class_name }
 
 onready = { "onready " }
 export = { "export " }
