@@ -1,5 +1,7 @@
 # gdt
-gdscript tools for abstract manipulation of ASTs
+gdscript tools for abstract manipulation of ASTs.
+
+**ALL TOOLS ARE UNSTABLE**. The grammer is subject to change at any time, and so are formatting tools, as of 0.x
 
 ## Grammar Development
 

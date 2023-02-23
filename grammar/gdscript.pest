@@ -3,11 +3,20 @@ program = { SOI ~ inheritance ~ class_name? ~ top_level_decl ~ EOI }
 
 // all chars allowed by gdscript in an identifier
 char = { ASCII_ALPHA }
-chars = @{ char+ }
+identifier = @{ char+ }
 
-inheritance = ${ "extends " ~ chars ~ WHITESPACE }
-class_name = ${ "class_name " ~ chars }
-top_level_decl = { "a"* }
+digit = { ASCII_ALPHANUMERIC }
+number = @{ digit+ }
+
+expression = { identifier | number }
+
+inheritance = ${ "extends " ~ identifier ~ WHITESPACE }
+class_name = ${ "class_name " ~ identifier }
+top_level_decl = { statement* }
+
+statement = _{ variableDeclaration }
+
+variableDeclaration = { "var " ~ identifier ~ "=" ~ expression }
 
 WHITESPACE = _{ " " | "\t" | "\n" }
 COMMENT = { "#" ~ (!"\n" ~ ANY)* }
