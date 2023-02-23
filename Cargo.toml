@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "gdt", # command line for gdt, with formatter, linter, & parser
+    "gdscript-parse",
+    "gdscript-format", 
+    "gdscript-lint"
+]
