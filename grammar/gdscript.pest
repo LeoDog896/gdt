@@ -16,7 +16,10 @@ top_level_decl = { statement* }
 
 statement = _{ variableDeclaration }
 
-variableDeclaration = { "var " ~ identifier ~ "=" ~ expression }
+onready = { "onready " }
+export = { "export " }
+
+variableDeclaration = { onready? ~ export? ~ "var " ~ identifier ~ "=" ~ expression }
 
 WHITESPACE = _{ " " | "\t" | "\n" }
 COMMENT = { "#" ~ (!"\n" ~ ANY)* }
