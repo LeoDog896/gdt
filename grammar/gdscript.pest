@@ -9,15 +9,13 @@ program = {
 ident_char = { ASCII_ALPHANUMERIC | "_" }
 identifier = @{ ident_char+ }
 
-char = { ASCII_ALPHANUMERIC | ":" | "/" | "." }
-chars = @{ char* }
-
 digit = { ASCII_DIGIT }
 number = @{ digit+ }
 
+chars = @{ (!"\"" ~ ANY)* }
 string = ${ "\"" ~ chars ~ "\"" }
 
-array = { 
+array = {
 	"[" ~ "]" |
     "[" ~ expression ~ ("," ~ expression)* ~ "]"
 }
