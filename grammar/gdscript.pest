@@ -6,7 +6,7 @@ program = {
 }
 
 // all chars allowed by gdscript in an identifier
-ident_char = { ASCII_ALPHA | "_" }
+ident_char = { ASCII_ALPHANUMERIC | "_" }
 identifier = @{ ident_char+ }
 
 char = { ASCII_ALPHANUMERIC | ":" | "/" | "." }
