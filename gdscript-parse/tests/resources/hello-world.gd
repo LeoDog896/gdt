@@ -1,80 +1,83 @@
-// https://docs.godotengine.org/en/latest/contributing/development/file_formats/gdscript_grammar.html
-program = {
-	SOI
-    ~ statement* ~
-    EOI
-}
+# Everything after "#" is a comment.
+# A file is a class!
 
-// all chars allowed by gdscript in an identifier
-ident_char = { ASCII_ALPHANUMERIC | "_" }
-identifier = @{ ident_char+ }
+# (optional) icon to show in the editor dialogs:
+@icon("res://path/to/optional/icon.svg")
 
-digit = { ASCII_DIGIT }
-number = @{ digit+ }
+# (optional) class definition:
+class_name MyClass
 
-chars = @{ (!"\"" ~ ANY)* }
-string = ${ "\"" ~ chars ~ "\"" }
+# Inheritance:
+extends BaseClass
 
-array = {
-	"[" ~ "]" |
-    "[" ~ expression ~ ("," ~ expression)* ~ "]"
-}
 
-pair = { (string | identifier | number) ~ ("=" | ":") ~ expression }
+# Member variables.
+var a = 5
+var s = "Hello"
+var arr = [1, 2, 3]
+var dict = {"key": "value", 2: 3}
+var other_dict = {key = "value", other_key = 2}
+var typed_var: int
+var inferred_type := "String"
 
-object = {
-    "{" ~ "}" |
-    "{" ~ pair ~ ("," ~ pair)* ~ "}"
-}
+# Constants.
+const ANSWER = 42
+const THE_NAME = "Charly"
 
-expression = { identifier | number | string | array | object }
+# Enums.
+enum {UNIT_NEUTRAL, UNIT_ENEMY, UNIT_ALLY}
+enum Named {THING_1, THING_2, ANOTHER_THING = -1}
 
-inheritance = ${ "extends " ~ identifier }
-class_name = ${ "class_name " ~ identifier }
+# Built-in vector types.
+var v2 = Vector2(1, 2)
+var v3 = Vector3(1, 2, 3)
 
-annotation = @{ "@" ~ identifier ~ "(" ~ string ~ ")" }
 
-statement = { annotation* ~ (
-		variable_declaration
-    	| const_declaration
-    	| inheritance
-    	| class_name
-    	| enum_declaration
-	)
-}
+# Functions.
+func some_function(param1, param2, param3):
+    const local_const = 5
 
-onready = { "onready " }
-export = { "export " }
+    if param1 < local_const:
+        print(param1)
+    elif param2 > 5:
+        print(param2)
+    else:
+        print("Fail!")
 
-variable_type = { ":" ~ identifier }
-inferred = @{ ":=" }
-variable_declaration = { 
-	onready?
-    ~ export?
-    ~ "var "
-    ~ identifier
-    ~ (
-    	(variable_type ~ ("=" ~ expression)?)
-        | (variable_type? ~ ("=" ~ expression))
-        | (inferred ~ expression)
-    )?
-}
+    for i in range(20):
+        print(i)
 
-enum_token = { "enom" }
+    while param2 != 0:
+        param2 -= 1
 
-enum_declaration = {
-	enum_token
-}
+    match param3:
+        3:
+            print("param3 is 3!")
+        _:
+            print("param3 is not 3!")
 
-// const's don't have walrus operators
-const_declaration = {
-	export?
-    ~ "const "
-    ~ identifier
-    ~ variable_type?
-    ~ "="
-    ~ expression
-}
+    var local_var = param1 + 3
+    return local_var
 
-WHITESPACE = _{ " " | "\t" | "\n" }
-COMMENT = { "#" ~ (!"\n" ~ ANY)* }
+
+# Functions override functions with the same name on the base/super class.
+# If you still want to call them, use "super":
+func something(p1, p2):
+    super(p1, p2)
+
+
+# It's also possible to call another function in the super class:
+func other_something(p1, p2):
+    super.something(p1, p2)
+
+
+# Inner class
+class Something:
+    var a = 10
+
+
+# Constructor
+func _init():
+    print("Constructed!")
+    var lv = Something.new()
+    print(lv.a)
