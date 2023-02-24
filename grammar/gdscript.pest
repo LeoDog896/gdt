@@ -48,12 +48,20 @@ class_name = ${ "class_name " ~ identifier }
 
 annotation = @{ "@" ~ identifier ~ "(" ~ string ~ ")" }
 
+local_statement = {
+	variable_declaration
+    | const_declaration
+    | enum_declaration
+    | function_declaration
+}
+
 statement = { annotation* ~ (
 		variable_declaration
     	| const_declaration
     	| inheritance
     	| class_name
     	| enum_declaration
+        | function_declaration
 	)
 }
 
@@ -91,6 +99,11 @@ const_declaration = {
     ~ "="
     ~ expression
 }
+
+function_token = { "func " }
+function_name = { identifier }
+function_header = { function_token ~ function_name ~ "(" ~ (identifier ~ ("," ~ identifier)*)? ~ ")" ~ ":" }
+function_declaration = { function_header }
 
 WHITESPACE = _{ " " | "\t" | "\n" }
 COMMENT = { "#" ~ (!"\n" ~ ANY)* }
