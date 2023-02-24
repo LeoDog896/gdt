@@ -10,7 +10,7 @@ ident_char = { ASCII_ALPHANUMERIC | "_" }
 identifier = @{ ident_char+ }
 
 digit = { ASCII_DIGIT }
-number = @{ digit+ }
+number = @{ ("-")? ~ digit+ }
 
 chars = @{ (!"\"" ~ ANY)* }
 string = ${ "\"" ~ chars ~ "\"" }
@@ -27,38 +27,67 @@ object = {
     "{" ~ pair ~ ("," ~ pair)* ~ "}"
 }
 
-expression = { identifier | number | string | array | object }
+function = {
+	identifier
+    ~ "(" ~ expression?
+    	~ ("," ~ expression)*
+    ~ ")"
+}
+
+expression = { 
+	function
+	| identifier
+    | number
+    | string
+    | array
+    | object
+}
 
 inheritance = ${ "extends " ~ identifier }
 class_name = ${ "class_name " ~ identifier }
 
 annotation = @{ "@" ~ identifier ~ "(" ~ string ~ ")" }
 
-statement = { annotation* ~ (variableDeclaration | constDeclaration | inheritance | class_name) }
+statement = { annotation* ~ (
+		variable_declaration
+    	| const_declaration
+    	| inheritance
+    	| class_name
+    	| enum_declaration
+	)
+}
 
 onready = { "onready " }
 export = { "export " }
 
-variableType = { ":" ~ identifier }
+variable_type = { ":" ~ identifier }
 inferred = @{ ":=" }
-variableDeclaration = { 
+variable_declaration = { 
 	onready?
     ~ export?
     ~ "var "
     ~ identifier
     ~ (
-    	(variableType ~ ("=" ~ expression)?)
-        | (variableType? ~ ("=" ~ expression))
+    	(variable_type ~ ("=" ~ expression)?)
+        | (variable_type? ~ ("=" ~ expression))
         | (inferred ~ expression)
     )?
 }
 
-// const's don't have walrus operators
-constDeclaration = {
+enum_token = _{ "enum" }
+enum_value = { identifier ~ ("=" ~ number)? }
+enum_header = ${ enum_token ~ WHITESPACE+ ~ (identifier)? }
+enum_declaration = {
+	enum_header ~
+    "{" ~ enum_value ~ ("," ~ enum_value)* ~ "}"
+}
+
+// const doesn't have walrus operators
+const_declaration = {
 	export?
     ~ "const "
     ~ identifier
-    ~ variableType?
+    ~ variable_type?
     ~ "="
     ~ expression
 }
